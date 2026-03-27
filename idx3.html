@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>idx3 페이지</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #0a0a0a;  /* 가장 어두운 배경으로 마지막 페이지 느낌 */
+      color: #eee;
+    }
+
+    .card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 48px 64px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+
+    .badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: #4caf50;         /* 초록색 : 마지막 페이지, 완료 느낌 */
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #4caf50;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 0 0 12px 0;
+      color: #4caf50;
+    }
+
+    p {
+      color: #aaa;
+      margin: 0 0 32px 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    /* 
+      처음으로 돌아가는 버튼 : 강조색(초록)
+      이전으로 가는 버튼 : 테두리만 있는 보조 버튼
+    */
+    .btn-home {
+      background: #4caf50;
+    }
+    .btn-home:hover {
+      background: #388e3c;
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      background: transparent;
+      border: 2px solid #333;
+      color: #aaa;
+    }
+    .btn-back:hover {
+      background: #333;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* 
+      .divider : 버튼들 위에 있는 구분선
+      hr 태그 대신 CSS로 만드는 방법
+    */
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: #4caf50;
+      margin: 0 auto 32px auto;  /* auto : 좌우 자동 = 가운데 정렬 */
+      border-radius: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+    <div class="badge">✓ Page 3 / 3</div>
+
+    <h1>idx3 페이지</h1>
+
+    <div class="divider"></div>
+
+    <p>마지막 페이지입니다.<br>처음(index)으로 돌아가거나, 이전 페이지로 이동할 수 있습니다.</p>
+
+    <div class="btn-group">
+      <a href="idx2.html" class="btn btn-back">← idx2로 돌아가기</a>
+      <a href="index.html" class="btn btn-home">↩ 처음으로 돌아가기</a>
+    </div>
+
+  </div>
+</body>
+</html>

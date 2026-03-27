@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>idx2 페이지</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #0d1b2a;  /* index와 약간 다른 배경색으로 "다른 페이지"임을 시각적으로 구분 */
+      color: #eee;
+    }
+
+    .card {
+      background: #1b263b;
+      border: 1px solid #415a77;
+      border-radius: 16px;
+      padding: 48px 64px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .badge {
+      display: inline-block;
+      background: #415a77;
+      color: #778da9;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 0 0 12px 0;
+      color: #778da9;
+    }
+
+    p {
+      color: #aaa;
+      margin: 0 0 32px 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* 
+      이 페이지에는 버튼이 2개 : 다음으로(idx3) + 뒤로(index)
+      .btn-group : 버튼 2개를 나란히 배치하기 위한 컨테이너
+    */
+    .btn-group {
+      display: flex;            /* flexbox로 가로 배치 */
+      gap: 16px;                /* 버튼 사이 간격 16px */
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    /* 
+      .btn-primary : 주요 버튼 (다음으로 이동)
+      .btn-secondary : 보조 버튼 (뒤로 이동)
+      같은 .btn 스타일을 공유하고, 색상만 다르게 지정
+    */
+    .btn-primary {
+      background: #778da9;
+    }
+    .btn-primary:hover {
+      background: #5e748e;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #415a77;
+      color: #778da9;
+    }
+    .btn-secondary:hover {
+      background: #415a77;
+      color: white;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+    <div class="badge">Page 2 / 3</div>
+
+    <h1>idx2 페이지</h1>
+
+    <p>두 번째 페이지입니다.<br>다음 페이지로 이동하거나, 이전으로 돌아갈 수 있습니다.</p>
+
+    <div class="btn-group">
+      <!--
+        버튼이 2개이므로 .btn-group 안에 나란히 배치.
+        각각 href로 이동할 페이지를 다르게 지정.
+      -->
+      <a href="index.html" class="btn btn-secondary">← index로 돌아가기</a>
+      <a href="idx3.html" class="btn btn-primary">idx3 페이지로 이동 →</a>
+    </div>
+
+  </div>
+</body>
+</html>
