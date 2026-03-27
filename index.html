@@ -118,6 +118,13 @@
       transition: background 0.2s, transform 0.2s;  /* 마우스 올렸을 때 부드럽게 변하는 효과 */
     }
 
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
     /* .btn:hover : 마우스를 버튼 위에 올렸을 때 스타일 */
     .btn:hover {
       background: #c73652;
@@ -152,7 +159,10 @@
       <br> : 줄바꿈 태그. 닫는 태그 없음.
     -->
 
-    <a href="idx2.html" class="btn">idx2 페이지로 이동 →</a>
+    <div class="btn-group">
+      <a href="idx2.html" class="btn">idx2 페이지로 이동 →</a>
+      <a href="idx3.html" class="btn">마지막 페이지로 이동 →</a>
+    </div>
     <!--
       <a href="..."> : 링크 태그. 가장 기본적인 페이지 이동 방법.
       href="idx2.html" → 같은 폴더에 있는 idx2.html 파일로 이동.
