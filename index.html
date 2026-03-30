@@ -35,7 +35,6 @@
     th { background: #4CAF50; color: white; padding: 10px; text-align: left; }
     td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: top; }
     tr:hover { background: #f9f9f9; }
-    .btn-edit { background: #2196F3; color: white; margin-right: 5px; }
     .btn-delete { background: #f44336; color: white; }
     .content-cell { max-width: 300px; white-space: pre-wrap; word-break: break-all; }
     .msg { text-align: center; padding: 20px; color: #999; }
@@ -45,7 +44,6 @@
 
 <h1>📚 나만의 레퍼런스</h1>
 
-<!-- 입력 폼 -->
 <div class="form-box">
   <div class="form-row">
     <input type="text" id="inp_title" placeholder="제목" />
@@ -55,16 +53,13 @@
   <div class="form-row" style="margin-top:10px">
     <input type="text" id="inp_tags" placeholder="태그 (예: 문법, 클래스)" />
   </div>
-  <button class="btn-save" onclick="saveData()">💾 저장</button>
+  <button type="button" class="btn-save" id="btn_save">💾 저장</button>
 </div>
 
-<!-- 검색 -->
 <div class="search-box">
-  <input type="text" id="inp_search" placeholder="🔍 제목 또는 내용으로 검색..."
-    oninput="loadData()" />
+  <input type="search" id="inp_search" placeholder="🔍 제목 또는 내용으로 검색..." autocomplete="off" />
 </div>
 
-<!-- 목록 -->
 <table>
   <thead>
     <tr>
@@ -81,52 +76,81 @@
 </table>
 
 <script>
-  // ★ 여기에 본인 Supabase 정보 입력 ★
   const SUPABASE_URL = 'https://thyxfofvzvhnmlzsajjd.supabase.co'
-  const SUPABASE_KEY = 'sb_publishable_MBSKW3Xyg7hgxcvcLh_FJQ_Sgga2DdR' // 공개키 값 
+  const SUPABASE_KEY = 'sb_publishable_MBSKW3Xyg7hgxcvcLh_FJQ_Sgga2DdR'
+  const TABLE_NAME = 'tbl_Test'
 
   const { createClient } = supabase
   const db = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-  // 저장
-  async function saveData() {
-    const title    = document.getElementById('inp_title').value.trim()
-    const content  = document.getElementById('inp_content').value.trim()
-    const category = document.getElementById('inp_category').value.trim()
-    const tags     = document.getElementById('inp_tags').value.trim()
+  const $ = (id) => document.getElementById(id)
 
-    if (!title) { alert('제목을 입력하세요!'); return; }
+  function escapeHtml(str) {
+    if (str == null || str === '') return ''
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  }
 
-    const { error } = await db.from('tbl_Test').insert({ title, content, category, tags })
-
-    if (error) {
-      alert('저장 실패: ' + error.message)
-    } else {
-      alert('저장됐습니다!')
-      document.getElementById('inp_title').value = ''
-      document.getElementById('inp_content').value = ''
-      document.getElementById('inp_category').value = ''
-      document.getElementById('inp_tags').value = ''
-      loadData()
+  function getFormPayload() {
+    return {
+      title: $('inp_title').value.trim(),
+      content: $('inp_content').value.trim(),
+      category: $('inp_category').value.trim(),
+      tags: $('inp_tags').value.trim(),
     }
   }
 
-  // 목록 불러오기
-  async function loadData() {
-    const search = document.getElementById('inp_search').value.trim()
+  function clearForm() {
+    $('inp_title').value = ''
+    $('inp_content').value = ''
+    $('inp_category').value = ''
+    $('inp_tags').value = ''
+  }
 
-    let query = db.from('tbl_Test').select('*').order('id', { ascending: false })
+  function debounce(fn, ms) {
+    let t
+    return (...args) => {
+      clearTimeout(t)
+      t = setTimeout(() => fn(...args), ms)
+    }
+  }
+
+  async function saveData() {
+    const { title, content, category, tags } = getFormPayload()
+    if (!title) {
+      alert('제목을 입력하세요!')
+      return
+    }
+
+    const { error } = await db.from(TABLE_NAME).insert({ title, content, category, tags })
+
+    if (error) {
+      alert('저장 실패: ' + error.message)
+      return
+    }
+
+    alert('저장됐습니다!')
+    clearForm()
+    loadData()
+  }
+
+  async function loadData() {
+    const search = $('inp_search').value.trim()
+
+    let query = db.from(TABLE_NAME).select('*').order('id', { ascending: false })
 
     if (search) {
       query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%)`)
     }
 
     const { data, error } = await query
-
-    const tbody = document.getElementById('tbl_body')
+    const tbody = $('tbl_body')
 
     if (error) {
-      tbody.innerHTML = `<tr><td colspan="5" class="msg">오류: ${error.message}</td></tr>`
+      tbody.innerHTML = `<tr><td colspan="5" class="msg">오류: ${escapeHtml(error.message)}</td></tr>`
       return
     }
 
@@ -135,23 +159,24 @@
       return
     }
 
-    tbody.innerHTML = data.map(row => `
+    tbody.innerHTML = data.map((row) => `
       <tr>
-        <td>${row.title || ''}</td>
-        <td>${row.category || ''}</td>
-        <td class="content-cell">${row.content || ''}</td>
-        <td>${row.tags || ''}</td>
+        <td>${escapeHtml(row.title)}</td>
+        <td>${escapeHtml(row.category)}</td>
+        <td class="content-cell">${escapeHtml(row.content)}</td>
+        <td>${escapeHtml(row.tags)}</td>
         <td>
-          <button class="btn-edit" onclick="deleteData(${row.id})">삭제</button>
+          <button type="button" class="btn-delete" data-delete-id="${Number(row.id)}">삭제</button>
         </td>
       </tr>
     `).join('')
   }
 
-  // 삭제
+  const loadDataDebounced = debounce(loadData, 300)
+
   async function deleteData(id) {
     if (!confirm('삭제할까요?')) return
-    const { error } = await db.from('tbl_Test').delete().eq('id', id)
+    const { error } = await db.from(TABLE_NAME).delete().eq('id', id)
     if (error) {
       alert('삭제 실패: ' + error.message)
     } else {
@@ -159,7 +184,16 @@
     }
   }
 
-  // 페이지 로드시 목록 불러오기
+  $('btn_save').addEventListener('click', saveData)
+  $('inp_search').addEventListener('input', loadDataDebounced)
+
+  $('tbl_body').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-delete-id]')
+    if (!btn) return
+    const id = Number(btn.dataset.deleteId)
+    if (Number.isFinite(id)) deleteData(id)
+  })
+
   loadData()
 </script>
 
